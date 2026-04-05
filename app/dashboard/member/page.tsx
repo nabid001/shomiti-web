@@ -1,5 +1,3 @@
-"use cache";
-
 import { SiteHeader } from "@/components/sidebar/site-header";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { getAllUsers } from "@/features/dashboard/user/actions/user";

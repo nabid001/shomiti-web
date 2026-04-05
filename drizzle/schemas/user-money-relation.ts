@@ -6,13 +6,13 @@ export const relations = defineRelations({ userTable, moneyTable }, (r) => ({
   userTable: {
     money: r.many.moneyTable({
       from: r.userTable.id,
-      to: r.moneyTable.payedBy,
+      to: r.moneyTable.paidBy,
     }),
   },
 
   moneyTable: {
     user: r.one.userTable({
-      from: r.moneyTable.payedBy,
+      from: r.moneyTable.paidBy,
       to: r.userTable.id,
     }),
   },

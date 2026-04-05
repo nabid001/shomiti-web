@@ -2,42 +2,42 @@ import { SiteHeader } from "@/components/sidebar/site-header";
 import { SidebarInset } from "@/components/ui/sidebar";
 import {
   Card,
+  CardContent,
+  CardFooter,
   CardHeader,
   CardDescription,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  UsersIcon,
-  WalletIcon,
   AlertCircleIcon,
   TrendingUpIcon,
+  UsersIcon,
+  WalletIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { getDashboardStats } from "@/features/payment/actions/payment";
 
-// Replace these with real DB queries when ready
-const stats = {
-  totalCollected: 84000,
-  activeMembers: 34,
-  missedThisMonth: 7,
-  collectionRate: 79,
-};
+export default async function DashboardPage() {
+  const stats = await getDashboardStats();
 
-export default function DashboardPage() {
+  const now = new Date();
+  const monthLabel = now.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
   return (
     <SidebarInset>
       <SiteHeader title="Dashboard" />
       <div className="flex flex-1 flex-col">
         <div className="@container/main flex flex-1 flex-col gap-2">
           <div className="flex flex-col gap-6 p-4 md:p-6">
-            {/* Page heading + quick action */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-3">
               <div>
                 <h1 className="text-2xl font-semibold">Overview</h1>
                 <p className="text-sm text-muted-foreground mt-0.5">
-                  April 2026
+                  {monthLabel}
                 </p>
               </div>
               <Button asChild>
@@ -45,7 +45,6 @@ export default function DashboardPage() {
               </Button>
             </div>
 
-            {/* Stat cards */}
             <div className="grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
               <Card>
                 <CardHeader>
@@ -88,7 +87,8 @@ export default function DashboardPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardFooter className="text-sm text-muted-foreground">
-                  Members who haven't paid
+                  {stats.activeMembers - stats.missedThisMonth} of{" "}
+                  {stats.activeMembers} paid
                 </CardFooter>
               </Card>
 
@@ -101,13 +101,9 @@ export default function DashboardPage() {
                   <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
                     {stats.collectionRate}%
                   </CardTitle>
-                  <Badge variant="outline" className="w-fit">
-                    This month
-                  </Badge>
                 </CardHeader>
                 <CardFooter className="text-sm text-muted-foreground">
-                  {stats.activeMembers - stats.missedThisMonth} of{" "}
-                  {stats.activeMembers} paid
+                  This month
                 </CardFooter>
               </Card>
             </div>
