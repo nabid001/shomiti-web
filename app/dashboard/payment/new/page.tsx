@@ -1,8 +1,7 @@
 import { SiteHeader } from "@/components/sidebar/site-header";
-import { SidebarHeader, SidebarInset } from "@/components/ui/sidebar";
-import React from "react";
+import { SidebarInset } from "@/components/ui/sidebar";
 
-const AddMoney = () => {
+const NewPayment = () => {
   return (
     <SidebarInset>
       <SiteHeader title="Add Money" />
@@ -17,4 +16,4 @@ const AddMoney = () => {
   );
 };
 
-export default AddMoney;
+export default NewPayment;

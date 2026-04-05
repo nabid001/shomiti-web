@@ -4,6 +4,8 @@ import { InsertUser, userTable } from "@/drizzle/schemas";
 import { userFormSchema } from "../schema/user-form-schema";
 import { db } from "@/drizzle/db";
 import { cache } from "react";
+import { revalidatePath } from "next/cache";
+import { eq } from "drizzle-orm";
 
 export const getAllUsers = cache(async () => {
   try {
@@ -38,3 +40,13 @@ export const createUser = async (data: InsertUser) => {
 
   return newUser;
 };
+
+export async function deleteUser(id: string) {
+  await db.delete(userTable).where(eq(userTable.id, id));
+  revalidatePath("/dashboard/users");
+}
+
+export async function updateUser(id: string, data: any) {
+  await db.update(userTable).set(data).where(eq(userTable.id, id));
+  revalidatePath("/dashboard/users");
+}
