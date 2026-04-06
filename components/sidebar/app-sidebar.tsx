@@ -46,7 +46,7 @@ const data = {
       title: "Payments",
       icon: <WalletIcon />,
       items: [
-        { title: "Monthly table", url: "/dashboard/payment" },
+        // { title: "Monthly table", url: "/dashboard/payment" },
         { title: "Record payment", url: "/dashboard/payment/new" },
       ],
     },

@@ -10,6 +10,7 @@ export const userTable = pgTable("users", {
   email: text("email").notNull().unique(),
   photo: text("photo"), // nullable — don't block user creation without a photo
   isActive: boolean("is_active").notNull().default(true), // soft-delete / deactivate members
+  // mobileNumber: text("mobile_number"), // optional contact info
   createdAt: createdAt,
   updatedAt: updatedAt,
 });

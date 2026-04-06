@@ -2,7 +2,6 @@ import { SiteHeader } from "@/components/sidebar/site-header";
 import { SidebarInset } from "@/components/ui/sidebar";
 import {
   Card,
-  CardContent,
   CardFooter,
   CardHeader,
   CardDescription,
@@ -16,23 +15,42 @@ import {
   WalletIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { getDashboardStats } from "@/features/payment/actions/payment";
+import {
+  getDashboardStats,
+  getMonthlyPaymentStatus,
+} from "@/features/payment/actions/payment";
+import { MonthlyTable } from "@/features/payment/components/table/monthly-table";
 
-export default async function DashboardPage() {
-  const stats = await getDashboardStats();
-
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ month?: string; year?: string }>;
+}) {
+  const sp = await searchParams;
   const now = new Date();
+  const month = Number(sp.month ?? now.getMonth() + 1);
+  const year = Number(sp.year ?? now.getFullYear());
+
+  const [stats, members] = await Promise.all([
+    getDashboardStats(),
+    getMonthlyPaymentStatus(month, year),
+  ]);
+
   const monthLabel = now.toLocaleDateString("en-US", {
     month: "long",
     year: "numeric",
   });
+
+  const paidCount = members.filter((m) => m.payment !== null).length;
+  const missedCount = members.length - paidCount;
 
   return (
     <SidebarInset>
       <SiteHeader title="Dashboard" />
       <div className="flex flex-1 flex-col">
         <div className="@container/main flex flex-1 flex-col gap-2">
-          <div className="flex flex-col gap-6 p-4 md:p-6">
+          <div className="flex flex-col gap-8 p-4 md:p-6">
+            {/* ── Header ───────────────────────────────────────────── */}
             <div className="flex items-center justify-between flex-wrap gap-3">
               <div>
                 <h1 className="text-2xl font-semibold">Overview</h1>
@@ -45,6 +63,7 @@ export default async function DashboardPage() {
               </Button>
             </div>
 
+            {/* ── Stat cards ───────────────────────────────────────── */}
             <div className="grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
               <Card>
                 <CardHeader>
@@ -106,6 +125,24 @@ export default async function DashboardPage() {
                   This month
                 </CardFooter>
               </Card>
+            </div>
+
+            {/* ── Monthly payments table ───────────────────────────── */}
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div>
+                  <h2 className="text-xl font-semibold">Monthly payments</h2>
+                  <p className="text-sm text-muted-foreground mt-0.5">
+                    {paidCount} paid · {missedCount} missed
+                  </p>
+                </div>
+              </div>
+
+              <MonthlyTable
+                members={members}
+                currentMonth={month}
+                currentYear={year}
+              />
             </div>
           </div>
         </div>

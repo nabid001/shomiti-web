@@ -15,8 +15,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  cacheComponents: true,
+  // cacheComponents: true,
   reactCompiler: true,
+  experimental: {
+    turbopackFileSystemCacheForDev: true,
+    sri: {
+      algorithm: "sha256",
+    },
+  },
 };
 
 export default nextConfig;
