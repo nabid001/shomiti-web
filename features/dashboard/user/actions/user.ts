@@ -58,7 +58,8 @@ export const createUser = async (data: InsertUser) => {
     return { error: true, message: "Failed to create member." };
   }
 
-  revalidatePath("/dashboard/user");
+  revalidatePath("/dashboard/member");
+  revalidatePath(`/dashboard/member/${newUser.id}`);
   return { error: false, id: newUser.id };
 };
 
@@ -69,18 +70,18 @@ export async function updateUser(id: string, data: Partial<InsertUser>) {
     .where(eq(userTable.id, id))
     .returning({ id: userTable.id });
 
-  revalidatePath("/dashboard/user");
-  revalidatePath(`/dashboard/user/${id}`);
+  revalidatePath("/dashboard/member");
+  revalidatePath(`/dashboard/member/${id}`);
   return updated;
 }
 
 export async function deleteUser(id: string) {
   await db.delete(userTable).where(eq(userTable.id, id));
-  revalidatePath("/dashboard/user");
+  revalidatePath("/dashboard/member");
 }
 
 export async function toggleUserActive(id: string, isActive: boolean) {
   await db.update(userTable).set({ isActive }).where(eq(userTable.id, id));
-  revalidatePath("/dashboard/user");
-  revalidatePath(`/dashboard/user/${id}`);
+  revalidatePath("/dashboard/member");
+  revalidatePath(`/dashboard/member/${id}`);
 }

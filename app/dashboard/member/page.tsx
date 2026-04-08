@@ -3,9 +3,13 @@ import { SidebarInset } from "@/components/ui/sidebar";
 import { getAllUsers } from "@/features/dashboard/user/actions/user";
 import { columns } from "@/features/dashboard/user/components/table/columns";
 import { DataTable } from "@/features/dashboard/user/components/table/data-table";
+import { cacheTag } from "next/cache";
 
 const User = async () => {
-  const users = await getAllUsers();
+  "use cache";
+  cacheTag("dashboard_users");
+
+  const users = getAllUsers();
 
   return (
     <SidebarInset>
@@ -15,7 +19,7 @@ const User = async () => {
           <div className="flex flex-col gap-4 p-4 md:gap-6 md:p-6">
             <h1 className="text-2xl font-bold">All Users</h1>
 
-            <DataTable columns={columns} data={users} />
+            <DataTable columns={columns} dataPromise={users} />
           </div>
         </div>
       </div>

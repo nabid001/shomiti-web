@@ -2,19 +2,7 @@
 
 import { db } from "@/drizzle/db";
 import { moneyTable, userTable } from "@/drizzle/schemas";
-import {
-  eq,
-  and,
-  count,
-  sum,
-  sql,
-  asc,
-  desc,
-  or,
-  ilike,
-  isNotNull,
-  isNull,
-} from "drizzle-orm";
+import { eq, and, count, sum } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { InsertMoney } from "@/drizzle/schemas";
 import { paymentFormSchema } from "@/schema/payment-form-schema";
@@ -58,7 +46,7 @@ export async function createPayment(data: InsertMoney) {
     return { error: true, message: "Failed to record payment." };
   }
 
-  revalidatePath("/dashboard/payment");
+  // revalidatePath("/dashboard/payment");
   revalidatePath("/dashboard");
   return { error: false, id: payment.id };
 }
@@ -73,7 +61,7 @@ export async function deletePayment(id: string) {
 
 // ─── Get all payments (with member name) ──────────────────────────────────
 
-export async function getAllPayments() {
+export const getAllPayments = cache(async () => {
   return db
     .select({
       id: moneyTable.id,
@@ -87,17 +75,17 @@ export async function getAllPayments() {
     .from(moneyTable)
     .leftJoin(userTable, eq(moneyTable.paidBy, userTable.id))
     .orderBy(moneyTable.paymentYear, moneyTable.paymentMonth);
-}
+});
 
 // ─── Get payments for one user ────────────────────────────────────────────
 
-export async function getPaymentsByUser(userId: string) {
+export const getPaymentsByUser = cache(async (userId: string) => {
   return db
     .select()
     .from(moneyTable)
     .where(eq(moneyTable.paidBy, userId))
     .orderBy(moneyTable.paymentYear, moneyTable.paymentMonth);
-}
+});
 
 // ─── Monthly status: who paid, who didn't, for a given month/year ─────────
 // Returns every active member annotated with their payment record (or null).

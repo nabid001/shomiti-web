@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -21,6 +23,17 @@ import {
 import Link from "next/link";
 import { deleteUser, toggleUserActive } from "../../actions/user";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 function getAge(dateOfBirth: string | null | undefined): string {
   if (!dateOfBirth) return "—";
@@ -121,6 +134,7 @@ export const columns: ColumnDef<SelectUser>[] = [
               <span className="sr-only">Open menu</span>
             </Button>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent align="end" className="w-40">
             <DropdownMenuItem asChild>
               <Link href={`/dashboard/member/${user.id}`}>
@@ -128,15 +142,41 @@ export const columns: ColumnDef<SelectUser>[] = [
                 View
               </Link>
             </DropdownMenuItem>
+
             <DropdownMenuItem onClick={handleToggleActive}>
               <PencilIcon className="mr-2 h-4 w-4" />
               {user.isActive ? "Deactivate" : "Activate"}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive" onClick={handleDelete}>
-              <TrashIcon className="mr-2 h-4 w-4" />
-              Delete
-            </DropdownMenuItem>
+
+            <DropdownMenuGroup>
+              <AlertDialog>
+                <AlertDialogTrigger className="flex p-2 rounded-lg text-sm gap-1.5 items-center hover:bg-accent transition-colors w-full">
+                  <TrashIcon className="mr-2 h-4 w-4" /> Delete
+                </AlertDialogTrigger>
+
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      this member and all payment record's!
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      variant={"destructive"}
+                      onClick={handleDelete}
+                    >
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       );
