@@ -20,7 +20,6 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2Icon } from "lucide-react";
 import { createPayment } from "../actions/payment";
-import { SelectUser } from "@/drizzle/schemas";
 import { paymentFormSchema } from "@/schema/payment-form-schema";
 
 const MONTHS = [
@@ -54,6 +53,12 @@ function getInitials(name: string) {
 }
 
 type FormValues = z.infer<typeof paymentFormSchema>;
+type PaymentMember = {
+  id: string;
+  fullName: string;
+  photo: string | null;
+  isActive: boolean;
+};
 
 export function RecordPaymentForm({
   members,
@@ -61,7 +66,7 @@ export function RecordPaymentForm({
   defaultMonth,
   defaultYear,
 }: {
-  members: SelectUser[];
+  members: PaymentMember[];
   defaultMemberId?: string;
   defaultMonth?: number;
   defaultYear?: number;

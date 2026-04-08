@@ -1,6 +1,6 @@
 import { SiteHeader } from "@/components/sidebar/site-header";
 import { SidebarInset } from "@/components/ui/sidebar";
-import { getAllUsers } from "@/features/dashboard/user/actions/user";
+import { getActiveUsersBasic } from "@/features/dashboard/user/actions/user";
 import { RecordPaymentForm } from "@/features/payment/components/record-payment-form";
 
 export default async function RecordPaymentPage({
@@ -9,8 +9,7 @@ export default async function RecordPaymentPage({
   searchParams: Promise<{ memberId?: string; month?: string; year?: string }>;
 }) {
   const sp = await searchParams;
-  const members = await getAllUsers();
-  const activeMembers = members.filter((m) => m.isActive);
+  const activeMembers = await getActiveUsersBasic();
 
   return (
     <SidebarInset>

@@ -1,9 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  logging: {
-    browserToTerminal: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -15,13 +12,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // cacheComponents: true,
+  cacheComponents: true,
   reactCompiler: true,
-  experimental: {
-    turbopackFileSystemCacheForDev: true,
-    sri: {
-      algorithm: "sha256",
-    },
+  logging: {
+    browserToTerminal: true,
   },
 };
 

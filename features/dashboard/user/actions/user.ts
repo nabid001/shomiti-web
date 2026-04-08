@@ -17,6 +17,23 @@ export const getAllUsers = cache(async () => {
   }
 });
 
+export const getActiveUsersBasic = cache(async () => {
+  try {
+    return await db
+      .select({
+        id: userTable.id,
+        fullName: userTable.fullName,
+        photo: userTable.photo,
+        isActive: userTable.isActive,
+      })
+      .from(userTable)
+      .where(eq(userTable.isActive, true));
+  } catch (error) {
+    console.error("Error fetching active users:", error);
+    throw new Error("Failed to fetch active users");
+  }
+});
+
 export const getUserById = cache(async (id: string) => {
   const [user] = await db
     .select()

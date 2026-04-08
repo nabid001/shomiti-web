@@ -55,6 +55,7 @@ export function NavMain({
                 asChild
                 tooltip={item.title}
                 isActive={isActive(item.url)}
+                className="min-w-8 transition-colors data-[active=true]:bg-primary data-[active=true]:text-primary-foreground"
               >
                 <Link href={item.url}>
                   {item.icon}
@@ -70,7 +71,7 @@ export function NavMain({
           {collapsibleItems.map((group) => (
             <Collapsible
               key={group.title}
-              defaultOpen={isParentActive(group.items)}
+              defaultOpen={true}
               className="group/collapsible"
             >
               <SidebarMenuItem>
@@ -89,6 +90,7 @@ export function NavMain({
                         <SidebarMenuSubButton
                           asChild
                           isActive={isActive(subItem.url)}
+                          className="min-w-8 transition-colors data-[active=true]:bg-primary data-[active=true]:text-primary-foreground"
                         >
                           <Link href={subItem.url}>
                             <span>{subItem.title}</span>
