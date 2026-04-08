@@ -52,8 +52,8 @@ const DashboardHome = ({ searchParams }: Props) => {
 export default DashboardHome;
 
 const MonthlyComponent = async ({ searchParams }: Props) => {
-  "use cache";
-  cacheTag("monthly_member");
+  // "use cache";
+  // cacheTag("monthly_member");
 
   const m = (await searchParams).month;
   const y = (await searchParams).year;

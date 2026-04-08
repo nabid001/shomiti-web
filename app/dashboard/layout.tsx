@@ -5,6 +5,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "../api/uploadthing/core";
 import { connection } from "next/server";
+import { Toaster } from "sonner";
 
 async function UTSSR() {
   await connection();
@@ -28,6 +29,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
       <AppSidebar variant="inset" />
 
       {children}
+      <Toaster />
     </SidebarProvider>
   );
 };

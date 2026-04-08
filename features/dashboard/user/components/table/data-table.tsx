@@ -11,7 +11,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { use, useState } from "react";
 
 import {
   Table,
@@ -34,16 +34,18 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  dataPromise: Promise<TData[]>;
 }
 
 export function DataTable<TData, TValue>({
   columns,
-  data,
+  dataPromise,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [pageSize, setPageSize] = useState(10);
+
+  const data = use(dataPromise);
 
   const table = useReactTable({
     data,

@@ -15,7 +15,9 @@ export const moneyTable = pgTable(
     amount: integer("amount").notNull(),
     paymentMonth: integer("payment_month").notNull(), // 1–12
     paymentYear: integer("payment_year").notNull(), // e.g. 2024
-    paidBy: uuid("paid_by").references(() => userTable.id),
+    paidBy: uuid("paid_by").references(() => userTable.id, {
+      onDelete: "cascade",
+    }),
     createdAt,
     updatedAt,
   },

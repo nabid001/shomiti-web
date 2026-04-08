@@ -23,7 +23,9 @@ import { Loader2Icon, UserIcon } from "lucide-react";
 import { createUser } from "../actions/user";
 import { userFormSchema } from "@/schema/user-form-schema";
 
-type FormValues = z.infer<typeof userFormSchema>;
+// `z.boolean().default(true)` makes `isActive` optional in the Zod *input* type.
+// `react-hook-form` + `zodResolver` uses the Zod input type for `useForm<FormValues>`.
+type FormValues = z.input<typeof userFormSchema>;
 
 const UserForm = () => {
   const router = useRouter();
@@ -43,21 +45,18 @@ const UserForm = () => {
     },
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
-    try {
-      const res = await createUser(data);
-      if (res.error) {
-        toast.error("Failed to create member. Please check the form.");
-        return;
-      }
-      toast.success("Member created successfully!");
-      form.reset();
-      setPhotoPreview("");
-      router.push("/dashboard/member");
-    } finally {
-      setIsSubmitting(false);
+    const res = await createUser(data);
+    if (res.error) {
+      toast.error("Failed to create member. Please check the form.");
+      setIsSubmitting(true);
     }
+
+    form.reset();
+    setPhotoPreview("");
+    router.push(`/dashboard/member/${res.id}`);
+    toast.success("Member created successfully!");
   };
 
   return (
@@ -90,7 +89,9 @@ const UserForm = () => {
                 field.onChange(res[0].ufsUrl);
                 toast.success("Photo uploaded.");
               }}
-              onUploadError={(err) => toast.error(err.message)}
+              onUploadError={(err) => {
+                toast.error(err.message);
+              }}
             />
           )}
         />

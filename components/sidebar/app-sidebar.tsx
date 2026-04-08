@@ -19,6 +19,7 @@ import {
   CommandIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { Spinner } from "../ui/spinner";
 
 const data = {
   user: {
@@ -69,7 +70,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} collapsibleItems={data.navCollapsible} />
+        <React.Suspense fallback={<Spinner />}>
+          <NavMain
+            items={data.navMain}
+            collapsibleItems={data.navCollapsible}
+          />
+        </React.Suspense>
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

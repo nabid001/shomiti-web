@@ -32,17 +32,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   CheckCircle2Icon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  MoreHorizontalIcon,
-  Trash2Icon,
   XCircleIcon,
 } from "lucide-react";
 import Link from "next/link";

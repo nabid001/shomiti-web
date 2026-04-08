@@ -1,3 +1,5 @@
+"use cache";
+
 import { notFound } from "next/navigation";
 import { getUserById } from "@/features/dashboard/user/actions/user";
 import { SiteHeader } from "@/components/sidebar/site-header";
